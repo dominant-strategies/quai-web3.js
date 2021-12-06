@@ -6,6 +6,7 @@
     "engines": {
         "node": ">=11.0.0"
     },
+    "version": "1.0.0",
     "main": "./packages/web3/src/index.js",
     "bundlesize": [
         {
