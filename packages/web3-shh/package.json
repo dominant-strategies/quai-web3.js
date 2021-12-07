@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-shh",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Web3 module to interact with the Whisper messaging protocol.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-shh",
     "license": "LGPL-3.0",
@@ -16,9 +16,9 @@
     "main": "lib/index.js",
     "dependencies": {
         "@quainetwork/web3-core": "2.0.4",
-        "@quainetwork/web3-core-method": "2.0.4",
-        "@quainetwork/web3-core-subscriptions": "2.0.4",
-        "@quainetwork/web3-net": "2.0.4"
+        "@quainetwork/web3-core-method": "2.0.5",
+        "@quainetwork/web3-core-subscriptions": "2.0.5",
+        "@quainetwork/web3-net": "2.0.5"
     },
     "devDependencies": {
         "@types/node": "^12.12.6",

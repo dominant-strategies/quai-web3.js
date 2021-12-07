@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-core-requestmanager",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Web3 module to handle requests to external providers.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-core-requestmanager",
     "license": "LGPL-3.0",
@@ -13,9 +13,9 @@
     },
     "dependencies": {
         "@quainetwork/web3-core-helpers": "2.0.3",
-        "@quainetwork/web3-providers-http": "2.0.4",
-        "@quainetwork/web3-providers-ipc": "2.0.4",
-        "@quainetwork/web3-providers-ws": "2.0.4",
+        "@quainetwork/web3-providers-http": "2.0.5",
+        "@quainetwork/web3-providers-ipc": "2.0.5",
+        "@quainetwork/web3-providers-ws": "2.0.5",
         "util": "^0.12.0"
     },
     "gitHead": "c7b6d12fcc2a20f253c65b33f3d050705df7f26e"
