@@ -24,5 +24,6 @@
         "@types/node": "^12.12.6",
         "dtslint": "^3.4.1",
         "typescript": "^3.9.5"
-    }
+    },
+    "gitHead": "9be2cdc0b4f9e2e175f60c8f7cc2719e6a556230"
 }
