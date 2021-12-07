@@ -330,6 +330,7 @@ var outputTransactionReceiptFormatter = function (receipt) {
  * @returns {Object}
  */
 var outputBlockFormatter = function (block) {
+    // temporarily commenting out the formatter.
     // transform to number
     // block.gasLimit = utils.hexToNumber(block.gasLimit);
     // block.gasUsed = utils.hexToNumber(block.gasUsed);
