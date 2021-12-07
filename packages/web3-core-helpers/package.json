@@ -14,8 +14,8 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "web3-eth-iban": "1.6.1",
-        "web3-utils": "1.6.1"
+        "@quainetwork/web3-eth-iban": "2.0.3",
+        "@quainetwork/web3-utils": "2.0.3"
     },
     "devDependencies": {
         "@types/node": "^12.12.6",

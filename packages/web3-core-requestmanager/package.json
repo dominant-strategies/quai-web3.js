@@ -13,10 +13,10 @@
     },
     "dependencies": {
         "util": "^0.12.0",
-        "web3-core-helpers": "1.6.1",
-        "web3-providers-http": "1.6.1",
-        "web3-providers-ipc": "1.6.1",
-        "web3-providers-ws": "1.6.1"
+        "@quainetwork/web3-core-helpers": "2.0.3",
+        "@quainetwork/web3-providers-http": "2.0.3",
+        "@quainetwork/web3-providers-ipc": "2.0.3",
+        "@quainetwork/web3-providers-ws": "2.0.3"
     },
     "gitHead": "c7b6d12fcc2a20f253c65b33f3d050705df7f26e"
 }

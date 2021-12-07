@@ -15,13 +15,13 @@
     "main": "lib/index.js",
     "dependencies": {
         "@types/bn.js": "^4.11.5",
-        "web3-core": "1.6.1",
-        "web3-core-helpers": "1.6.1",
-        "web3-core-method": "1.6.1",
-        "web3-core-promievent": "1.6.1",
-        "web3-core-subscriptions": "1.6.1",
-        "web3-eth-abi": "1.6.1",
-        "web3-utils": "1.6.1"
+        "@quainetwork/web3-core": "2.0.3",
+        "@quainetwork/web3-core-helpers": "2.0.3",
+        "@quainetwork/web3-core-method": "2.0.3",
+        "@quainetwork/web3-core-promievent": "2.0.3",
+        "@quainetwork/web3-core-subscriptions": "2.0.3",
+        "@quainetwork/web3-eth-abi": "2.0.3",
+        "@quainetwork/web3-utils": "2.0.3"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",

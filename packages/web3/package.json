@@ -23,46 +23,21 @@
         "dtslint": "dtslint --localTs ../../node_modules/typescript/lib types",
         "postinstall": "echo \"WARNING: the web3-shh and web3-bzz api will be deprecated in the next version\""
     },
-    "authors": [
-        {
-            "name": "Fabian Vogelsteller",
-            "email": "fabian@ethereum.org",
-            "homepage": "http://frozeman.de"
-        },
-        {
-            "name": "Marek Kotewicz",
-            "email": "marek@parity.io",
-            "url": "https://github.com/debris"
-        },
-        {
-            "name": "Marian Oancea",
-            "url": "https://github.com/cubedro"
-        },
-        {
-            "name": "Gav Wood",
-            "email": "g@parity.io",
-            "homepage": "http://gavwood.com"
-        },
-        {
-            "name": "Jeffery Wilcke",
-            "email": "jeffrey.wilcke@ethereum.org",
-            "url": "https://github.com/obscuren"
-        }
-    ],
+    "authors": [],
     "dependencies": {
         "web3-bzz": "1.6.1",
-        "web3-core": "1.6.1",
+        "@quainetwork/web3-core": "2.0.3",
         "web3-eth": "1.6.1",
         "web3-eth-personal": "1.6.1",
-        "web3-net": "1.6.1",
+        "@quainetwork/web3-net": "2.0.3",
         "web3-shh": "1.6.1",
-        "web3-utils": "1.6.1"
+        "@quainetwork/web3-utils": "2.0.3"
     },
     "devDependencies": {
         "@types/node": "^12.12.6",
         "dtslint": "^3.4.1",
         "typescript": "^3.9.5",
-        "web3-core-helpers": "1.6.1"
+        "@quainetwork/web3-core-helpers": "2.0.3"
     },
     "gitHead": "c7b6d12fcc2a20f253c65b33f3d050705df7f26e"
 }

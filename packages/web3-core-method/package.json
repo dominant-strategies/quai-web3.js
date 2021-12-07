@@ -15,10 +15,10 @@
     "main": "lib/index.js",
     "dependencies": {
         "@ethersproject/transactions": "^5.0.0-beta.135",
-        "web3-core-helpers": "1.6.1",
-        "web3-core-promievent": "1.6.1",
-        "web3-core-subscriptions": "1.6.1",
-        "web3-utils": "1.6.1"
+        "@quainetwork/web3-core-helpers": "2.0.3",
+        "@quainetwork/web3-core-promievent": "2.0.3",
+        "@quainetwork/web3-core-subscriptions": "2.0.3",
+        "@quainetwork/web3-utils": "2.0.3"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",
