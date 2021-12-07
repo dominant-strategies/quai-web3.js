@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-core",
-    "version": "2.0.1",
+    "version": "2.0.4",
     "description": "Web3 core tools for sub-packages. This is an internal package.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-core",
     "license": "LGPL-3.0",
@@ -14,13 +14,13 @@
     },
     "main": "lib/index.js",
     "dependencies": {
+        "@quainetwork/web3-core-helpers": "2.0.3",
+        "@quainetwork/web3-core-method": "2.0.4",
+        "@quainetwork/web3-core-requestmanager": "2.0.4",
+        "@quainetwork/web3-utils": "2.0.1",
         "@types/bn.js": "^4.11.5",
         "@types/node": "^12.12.6",
-        "bignumber.js": "^9.0.0",
-        "@quainetwork/web3-core-helpers": "2.0.3",
-        "@quainetwork/web3-core-method": "2.0.1",
-        "@quainetwork/web3-core-requestmanager": "2.0.1",
-        "@quainetwork/web3-utils": "2.0.1"
+        "bignumber.js": "^9.0.0"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",

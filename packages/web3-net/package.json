@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-net",
-    "version": "2.0.1",
+    "version": "2.0.4",
     "description": "Web3 module to interact with the Ethereum nodes networking properties.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-net",
     "license": "LGPL-3.0",
@@ -14,8 +14,8 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "@quainetwork/web3-core": "2.0.1",
-        "@quainetwork/web3-core-method": "2.0.1",
+        "@quainetwork/web3-core": "2.0.4",
+        "@quainetwork/web3-core-method": "2.0.4",
         "@quainetwork/web3-utils": "2.0.1"
     },
     "devDependencies": {

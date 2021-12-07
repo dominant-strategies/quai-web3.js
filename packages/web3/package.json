@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3",
-    "version": "2.0.1",
+    "version": "2.0.4",
     "description": "Ethereum JavaScript API",
     "repository": "https://github.com/spruce-solutions/quai-web3.js",
     "license": "LGPL-3.0",
@@ -25,19 +25,19 @@
     },
     "authors": [],
     "dependencies": {
+        "@quainetwork/web3-core": "2.0.4",
+        "@quainetwork/web3-net": "2.0.4",
+        "@quainetwork/web3-utils": "2.0.1",
         "web3-bzz": "1.6.1",
-        "@quainetwork/web3-core": "2.0.1",
         "web3-eth": "1.6.1",
         "web3-eth-personal": "1.6.1",
-        "@quainetwork/web3-net": "2.0.1",
-        "web3-shh": "1.6.1",
-        "@quainetwork/web3-utils": "2.0.1"
+        "web3-shh": "1.6.1"
     },
     "devDependencies": {
+        "@quainetwork/web3-core-helpers": "2.0.3",
         "@types/node": "^12.12.6",
         "dtslint": "^3.4.1",
-        "typescript": "^3.9.5",
-        "@quainetwork/web3-core-helpers": "2.0.3"
+        "typescript": "^3.9.5"
     },
     "gitHead": "c7b6d12fcc2a20f253c65b33f3d050705df7f26e"
 }
