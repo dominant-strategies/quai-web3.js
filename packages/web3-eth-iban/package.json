@@ -15,7 +15,7 @@
     "main": "lib/index.js",
     "dependencies": {
         "bn.js": "^4.11.9",
-        "@quainetwork/web3-utils": "2.0.3"
+        "@quainetwork/web3-utils": "2.0.1"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",

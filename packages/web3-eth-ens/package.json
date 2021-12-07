@@ -16,12 +16,12 @@
     "dependencies": {
         "content-hash": "^2.5.2",
         "eth-ens-namehash": "2.0.8",
-        "@quainetwork/web3-core": "2.0.3",
+        "@quainetwork/web3-core": "2.0.1",
         "@quainetwork/web3-core-helpers": "2.0.3",
-        "@quainetwork/web3-core-promievent": "2.0.3",
-        "@quainetwork/web3-eth-abi": "2.0.3",
-        "@quainetwork/web3-eth-contract": "2.0.3",
-        "@quainetwork/web3-utils": "2.0.3"
+        "@quainetwork/web3-core-promievent": "2.0.1",
+        "@quainetwork/web3-eth-abi": "2.0.1",
+        "@quainetwork/web3-eth-contract": "2.0.1",
+        "@quainetwork/web3-utils": "2.0.1"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",

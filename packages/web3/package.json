@@ -26,12 +26,12 @@
     "authors": [],
     "dependencies": {
         "web3-bzz": "1.6.1",
-        "@quainetwork/web3-core": "2.0.3",
+        "@quainetwork/web3-core": "2.0.1",
         "web3-eth": "1.6.1",
         "web3-eth-personal": "1.6.1",
-        "@quainetwork/web3-net": "2.0.3",
+        "@quainetwork/web3-net": "2.0.1",
         "web3-shh": "1.6.1",
-        "@quainetwork/web3-utils": "2.0.3"
+        "@quainetwork/web3-utils": "2.0.1"
     },
     "devDependencies": {
         "@types/node": "^12.12.6",

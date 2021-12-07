@@ -14,9 +14,9 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "@quainetwork/web3-core": "2.0.3",
-        "@quainetwork/web3-core-method": "2.0.3",
-        "@quainetwork/web3-utils": "2.0.3"
+        "@quainetwork/web3-core": "2.0.1",
+        "@quainetwork/web3-core-method": "2.0.1",
+        "@quainetwork/web3-utils": "2.0.1"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",
