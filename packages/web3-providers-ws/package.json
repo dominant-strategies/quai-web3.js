@@ -1,6 +1,6 @@
 {
   "name": "@quainetwork/web3-providers-ws",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Module to handle web3 RPC connections over WebSockets.",
   "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-providers-ws",
   "license": "LGPL-3.0",

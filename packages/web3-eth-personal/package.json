@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-eth-personal",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Web3 module to interact with the Ethereum blockchain accounts stored in the node.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-eth-personal",
     "license": "LGPL-3.0",
