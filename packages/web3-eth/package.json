@@ -19,7 +19,7 @@
         "@quainetwork/web3-core-method": "2.0.4",
         "@quainetwork/web3-core-subscriptions": "2.0.4",
         "@quainetwork/web3-eth-abi": "2.0.4",
-        "@quainetwork/web3-eth-contract": "2.0.4",
+        "@quainetwork/web3-eth-contract": "2.0.1",
         "@quainetwork/web3-eth-iban": "2.0.4",
         "@quainetwork/web3-net": "2.0.4",
         "@quainetwork/web3-utils": "2.0.1",

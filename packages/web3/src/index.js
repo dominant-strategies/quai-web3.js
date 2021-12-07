@@ -27,15 +27,14 @@
 
 "use strict";
 
-
-var version = require('../package.json').version;
-var core = require('web3-core');
-var Eth = require('web3-eth');
-var Net = require('web3-net');
-var Personal = require('web3-eth-personal');
-var Shh = require('web3-shh');
-var Bzz = require('web3-bzz');
-var utils = require('web3-utils');
+var version = require("../package.json").version;
+var core = require("@quainetwork/web3-core");
+var Eth = require("@quainetwork/web3-eth");
+var Net = require("@quainetwork/web3-net");
+var Personal = require("@quainetwork/web3-eth-personal");
+var Shh = require("@quainetwork/web3-shh");
+var Bzz = require("@quainetwork/web3-bzz");
+var utils = require("@quainetwork/web3-utils");
 
 var Web3 = function Web3() {
     var _this = this;
@@ -71,10 +70,9 @@ Web3.modules = {
     Net: Net,
     Personal: Personal,
     Shh: Shh,
-    Bzz: Bzz
+    Bzz: Bzz,
 };
 
 core.addProviders(Web3);
 
 module.exports = Web3;
-

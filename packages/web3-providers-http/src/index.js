@@ -22,11 +22,10 @@
  * @date 2015
  */
 
-var errors = require('web3-core-helpers').errors;
-var XHR2 = require('xhr2-cookies').XMLHttpRequest; // jshint ignore: line
-var http = require('http');
-var https = require('https');
-
+var errors = require("@quainetwork/web3-core-helpers").errors;
+var XHR2 = require("xhr2-cookies").XMLHttpRequest; // jshint ignore: line
+var http = require("http");
+var https = require("https");
 
 /**
  * HttpProvider should be used to send rpc calls over http
@@ -42,9 +41,9 @@ var HttpProvider = function HttpProvider(host, options) {
 
     // keepAlive is true unless explicitly set to false
     const keepAlive = options.keepAlive !== false;
-    this.host = host || 'http://localhost:8545';
+    this.host = host || "http://localhost:8545";
     if (!this.agent) {
-        if (this.host.substring(0,5) === "https") {
+        if (this.host.substring(0, 5) === "https") {
             this.httpsAgent = new https.Agent({ keepAlive });
         } else {
             this.httpAgent = new http.Agent({ keepAlive });
@@ -52,15 +51,19 @@ var HttpProvider = function HttpProvider(host, options) {
     }
 };
 
-HttpProvider.prototype._prepareRequest = function(){
+HttpProvider.prototype._prepareRequest = function () {
     var request;
 
     // the current runtime is a browser
-    if (typeof XMLHttpRequest !== 'undefined') {
+    if (typeof XMLHttpRequest !== "undefined") {
         request = new XMLHttpRequest();
     } else {
         request = new XHR2();
-        var agents = {httpsAgent: this.httpsAgent, httpAgent: this.httpAgent, baseUrl: this.baseUrl};
+        var agents = {
+            httpsAgent: this.httpsAgent,
+            httpAgent: this.httpAgent,
+            baseUrl: this.baseUrl,
+        };
 
         if (this.agent) {
             agents.httpsAgent = this.agent.https;
@@ -71,13 +74,13 @@ HttpProvider.prototype._prepareRequest = function(){
         request.nodejsSet(agents);
     }
 
-    request.open('POST', this.host, true);
-    request.setRequestHeader('Content-Type','application/json');
+    request.open("POST", this.host, true);
+    request.setRequestHeader("Content-Type", "application/json");
     request.timeout = this.timeout;
     request.withCredentials = this.withCredentials;
 
-    if(this.headers) {
-        this.headers.forEach(function(header) {
+    if (this.headers) {
+        this.headers.forEach(function (header) {
             request.setRequestHeader(header.name, header.value);
         });
     }
@@ -96,14 +99,14 @@ HttpProvider.prototype.send = function (payload, callback) {
     var _this = this;
     var request = this._prepareRequest();
 
-    request.onreadystatechange = function() {
+    request.onreadystatechange = function () {
         if (request.readyState === 4 && request.timeout !== 1) {
             var result = request.responseText;
             var error = null;
 
             try {
                 result = JSON.parse(result);
-            } catch(e) {
+            } catch (e) {
                 error = errors.InvalidResponse(request.responseText);
             }
 
@@ -112,14 +115,14 @@ HttpProvider.prototype.send = function (payload, callback) {
         }
     };
 
-    request.ontimeout = function() {
+    request.ontimeout = function () {
         _this.connected = false;
         callback(errors.ConnectionTimeout(this.timeout));
     };
 
     try {
         request.send(JSON.stringify(payload));
-    } catch(error) {
+    } catch (error) {
         this.connected = false;
         callback(errors.InvalidConnection(this.host));
     }

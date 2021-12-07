@@ -17,7 +17,7 @@ npm install web3-core-helpers
 ## Usage
 
 ```js
-const helpers = require('web3-core-helpers');
+const helpers = require('@quainetwork/web3-core-helpers');
 
 helpers.formatters;
 helpers.errors;

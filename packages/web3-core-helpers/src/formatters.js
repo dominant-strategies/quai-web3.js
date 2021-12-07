@@ -23,7 +23,7 @@
 
 "use strict";
 
-var utils = require("web3-utils");
+var utils = require("@quainetwork/web3-utils");
 var Iban = require("web3-eth-iban");
 
 /**

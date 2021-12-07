@@ -22,9 +22,8 @@
 
 "use strict";
 
-var errors = require('web3-core-helpers').errors;
-var oboe = require('oboe');
-
+var errors = require("@quainetwork/web3-core-helpers").errors;
+var oboe = require("oboe");
 
 var IpcProvider = function IpcProvider(path, net) {
     var _this = this;
@@ -33,46 +32,43 @@ var IpcProvider = function IpcProvider(path, net) {
     this.path = path;
     this.connected = false;
 
-    this.connection = net.connect({path: this.path});
+    this.connection = net.connect({ path: this.path });
 
     this.addDefaultEvents();
 
     // LISTEN FOR CONNECTION RESPONSES
-    var callback = function(result) {
+    var callback = function (result) {
         /*jshint maxcomplexity: 6 */
 
         var id = null;
 
         // get the id which matches the returned id
-        if(Array.isArray(result)) {
-            result.forEach(function(load){
-                if(_this.responseCallbacks[load.id])
-                    id = load.id;
+        if (Array.isArray(result)) {
+            result.forEach(function (load) {
+                if (_this.responseCallbacks[load.id]) id = load.id;
             });
         } else {
             id = result.id;
         }
 
         // notification
-        if(!id && result.method.indexOf('_subscription') !== -1) {
-            _this.notificationCallbacks.forEach(function(callback){
-                if(typeof callback === 'function')
-                    callback(result);
+        if (!id && result.method.indexOf("_subscription") !== -1) {
+            _this.notificationCallbacks.forEach(function (callback) {
+                if (typeof callback === "function") callback(result);
             });
 
             // fire the callback
-        } else if(_this.responseCallbacks[id]) {
+        } else if (_this.responseCallbacks[id]) {
             _this.responseCallbacks[id](null, result);
             delete _this.responseCallbacks[id];
         }
     };
 
     // use oboe.js for Sockets
-    if (net.constructor.name === 'Socket') {
-        oboe(this.connection)
-        .done(callback);
+    if (net.constructor.name === "Socket") {
+        oboe(this.connection).done(callback);
     } else {
-        this.connection.on('data', function(data){
+        this.connection.on("data", function (data) {
             _this._parseResponse(data.toString()).forEach(callback);
         });
     }
@@ -83,30 +79,29 @@ Will add the error and end event to timeout existing calls
 
 @method addDefaultEvents
 */
-IpcProvider.prototype.addDefaultEvents = function(){
+IpcProvider.prototype.addDefaultEvents = function () {
     var _this = this;
 
-    this.connection.on('connect', function(){
+    this.connection.on("connect", function () {
         _this.connected = true;
     });
 
-    this.connection.on('close', function(){
+    this.connection.on("close", function () {
         _this.connected = false;
     });
 
-    this.connection.on('error', function(){
+    this.connection.on("error", function () {
         _this._timeout();
     });
 
-    this.connection.on('end', function(){
+    this.connection.on("end", function () {
         _this._timeout();
     });
 
-    this.connection.on('timeout', function(){
+    this.connection.on("timeout", function () {
         _this._timeout();
     });
 };
-
 
 /**
  Will parse the response and make an array out of it.
@@ -116,36 +111,32 @@ IpcProvider.prototype.addDefaultEvents = function(){
  @method _parseResponse
  @param {String} data
  */
-IpcProvider.prototype._parseResponse = function(data) {
+IpcProvider.prototype._parseResponse = function (data) {
     var _this = this,
         returnValues = [];
 
     // DE-CHUNKER
     var dechunkedData = data
-        .replace(/\}[\n\r]?\{/g,'}|--|{') // }{
-        .replace(/\}\][\n\r]?\[\{/g,'}]|--|[{') // }][{
-        .replace(/\}[\n\r]?\[\{/g,'}|--|[{') // }[{
-        .replace(/\}\][\n\r]?\{/g,'}]|--|{') // }]{
-        .split('|--|');
+        .replace(/\}[\n\r]?\{/g, "}|--|{") // }{
+        .replace(/\}\][\n\r]?\[\{/g, "}]|--|[{") // }][{
+        .replace(/\}[\n\r]?\[\{/g, "}|--|[{") // }[{
+        .replace(/\}\][\n\r]?\{/g, "}]|--|{") // }]{
+        .split("|--|");
 
-    dechunkedData.forEach(function(data){
-
+    dechunkedData.forEach(function (data) {
         // prepend the last chunk
-        if(_this.lastChunk)
-            data = _this.lastChunk + data;
+        if (_this.lastChunk) data = _this.lastChunk + data;
 
         var result = null;
 
         try {
             result = JSON.parse(data);
-
-        } catch(e) {
-
+        } catch (e) {
             _this.lastChunk = data;
 
             // start timeout to cancel all requests
             clearTimeout(_this.lastChunkTimeout);
-            _this.lastChunkTimeout = setTimeout(function(){
+            _this.lastChunkTimeout = setTimeout(function () {
                 _this._timeout();
                 throw errors.InvalidResponse(data);
             }, 1000 * 15);
@@ -157,13 +148,11 @@ IpcProvider.prototype._parseResponse = function(data) {
         clearTimeout(_this.lastChunkTimeout);
         _this.lastChunk = null;
 
-        if(result)
-            returnValues.push(result);
+        if (result) returnValues.push(result);
     });
 
     return returnValues;
 };
-
 
 /**
 Get the adds a callback to the responseCallbacks object,
@@ -171,7 +160,7 @@ which will be called if a response matching the response Id will arrive.
 
 @method _addResponseCallback
 */
-IpcProvider.prototype._addResponseCallback = function(payload, callback) {
+IpcProvider.prototype._addResponseCallback = function (payload, callback) {
     var id = payload.id || payload[0].id;
     var method = payload.method || payload[0].method;
 
@@ -184,10 +173,10 @@ Timeout all requests when the end/error event is fired
 
 @method _timeout
 */
-IpcProvider.prototype._timeout = function() {
-    for(var key in this.responseCallbacks) {
-        if(this.responseCallbacks.hasOwnProperty(key)){
-            this.responseCallbacks[key](errors.InvalidConnection('on IPC'));
+IpcProvider.prototype._timeout = function () {
+    for (var key in this.responseCallbacks) {
+        if (this.responseCallbacks.hasOwnProperty(key)) {
+            this.responseCallbacks[key](errors.InvalidConnection("on IPC"));
             delete this.responseCallbacks[key];
         }
     }
@@ -198,16 +187,13 @@ IpcProvider.prototype._timeout = function() {
 
  @method reconnect
  */
-IpcProvider.prototype.reconnect = function() {
-    this.connection.connect({path: this.path});
+IpcProvider.prototype.reconnect = function () {
+    this.connection.connect({ path: this.path });
 };
-
 
 IpcProvider.prototype.send = function (payload, callback) {
     // try reconnect, when connection is gone
-    if(!this.connection.writable)
-        this.connection.connect({path: this.path});
-
+    if (!this.connection.writable) this.connection.connect({ path: this.path });
 
     this.connection.write(JSON.stringify(payload));
     this._addResponseCallback(payload, callback);
@@ -221,12 +207,11 @@ Subscribes to provider events.provider
 @param {Function} callback   the callback to call
 */
 IpcProvider.prototype.on = function (type, callback) {
+    if (typeof callback !== "function")
+        throw new Error("The second parameter callback must be a function.");
 
-    if(typeof callback !== 'function')
-        throw new Error('The second parameter callback must be a function.');
-
-    switch(type){
-        case 'data':
+    switch (type) {
+        case "data":
             this.notificationCallbacks.push(callback);
             break;
 
@@ -245,9 +230,8 @@ IpcProvider.prototype.on = function (type, callback) {
  @param {Function} callback   the callback to call
  */
 IpcProvider.prototype.once = function (type, callback) {
-
-    if(typeof callback !== 'function')
-        throw new Error('The second parameter callback must be a function.');
+    if (typeof callback !== "function")
+        throw new Error("The second parameter callback must be a function.");
 
     this.connection.once(type, callback);
 };
@@ -262,10 +246,10 @@ Removes event listener
 IpcProvider.prototype.removeListener = function (type, callback) {
     var _this = this;
 
-    switch(type){
-        case 'data':
-            this.notificationCallbacks.forEach(function(cb, index){
-                if(cb === callback)
+    switch (type) {
+        case "data":
+            this.notificationCallbacks.forEach(function (cb, index) {
+                if (cb === callback)
                     _this.notificationCallbacks.splice(index, 1);
             });
             break;
@@ -283,8 +267,8 @@ Removes all event listeners
 @param {String} type    'data', 'connect', 'error', 'end' or 'data'
 */
 IpcProvider.prototype.removeAllListeners = function (type) {
-    switch(type){
-        case 'data':
+    switch (type) {
+        case "data":
             this.notificationCallbacks = [];
             break;
 
@@ -303,9 +287,9 @@ IpcProvider.prototype.reset = function () {
     this._timeout();
     this.notificationCallbacks = [];
 
-    this.connection.removeAllListeners('error');
-    this.connection.removeAllListeners('end');
-    this.connection.removeAllListeners('timeout');
+    this.connection.removeAllListeners("error");
+    this.connection.removeAllListeners("end");
+    this.connection.removeAllListeners("timeout");
 
     this.addDefaultEvents();
 };
@@ -321,4 +305,3 @@ IpcProvider.prototype.supportsSubscriptions = function () {
 };
 
 module.exports = IpcProvider;
-

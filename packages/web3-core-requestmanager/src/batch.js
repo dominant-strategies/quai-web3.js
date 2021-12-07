@@ -22,8 +22,8 @@
 
 "use strict";
 
-var Jsonrpc = require('./jsonrpc');
-var errors = require('web3-core-helpers').errors;
+var Jsonrpc = require("./jsonrpc");
+var errors = require("@quainetwork/web3-core-helpers").errors;
 
 var Batch = function (requestManager) {
     this.requestManager = requestManager;
@@ -51,32 +51,42 @@ Batch.prototype.execute = function () {
 
     this.requestManager.sendBatch(requests, function (err, results) {
         results = sortResponses(results);
-        requests.map(function (request, index) {
-            return results[index] || {};
-        }).forEach(function (result, index) {
-            if (requests[index].callback) {
-                if (result && result.error) {
-                    return requests[index].callback(errors.ErrorResponse(result));
-                }
+        requests
+            .map(function (request, index) {
+                return results[index] || {};
+            })
+            .forEach(function (result, index) {
+                if (requests[index].callback) {
+                    if (result && result.error) {
+                        return requests[index].callback(
+                            errors.ErrorResponse(result)
+                        );
+                    }
 
-                if (!Jsonrpc.isValidResponse(result)) {
-                    return requests[index].callback(errors.InvalidResponse(result));
-                }
+                    if (!Jsonrpc.isValidResponse(result)) {
+                        return requests[index].callback(
+                            errors.InvalidResponse(result)
+                        );
+                    }
 
-                try {
-                    requests[index].callback(null, requests[index].format ? requests[index].format(result.result) : result.result);
-                } catch (err) {
-                    requests[index].callback(err);
+                    try {
+                        requests[index].callback(
+                            null,
+                            requests[index].format
+                                ? requests[index].format(result.result)
+                                : result.result
+                        );
+                    } catch (err) {
+                        requests[index].callback(err);
+                    }
                 }
-            }
-        });
+            });
     });
 };
 
 // Sort responses
-Batch.prototype._sortResponses = function (responses) {    
+Batch.prototype._sortResponses = function (responses) {
     return (responses || []).sort((a, b) => a.id - b.id);
-}
+};
 
 module.exports = Batch;
-

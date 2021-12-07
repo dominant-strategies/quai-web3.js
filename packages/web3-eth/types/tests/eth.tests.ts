@@ -18,7 +18,7 @@
  * @date 2018
  */
 
-import {Log} from 'web3-core';
+import {Log} from '@quainetwork/web3-core';
 import {
     BlockTransactionObject,
     BlockTransactionString,

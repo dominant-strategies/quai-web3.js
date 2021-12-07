@@ -19,12 +19,11 @@
 
 "use strict";
 
-
-const { callbackify } = require('util');
-var errors = require('web3-core-helpers').errors;
-var Jsonrpc = require('./jsonrpc.js');
-var BatchManager = require('./batch.js');
-var givenProvider = require('./givenProvider.js');
+const { callbackify } = require("util");
+var errors = require("@quainetwork/web3-core-helpers").errors;
+var Jsonrpc = require("./jsonrpc.js");
+var BatchManager = require("./batch.js");
+var givenProvider = require("./givenProvider.js");
 
 /**
  * It's responsible for passing messages to providers
@@ -45,15 +44,13 @@ var RequestManager = function RequestManager(provider, net) {
     this.subscriptions = new Map();
 };
 
-
 RequestManager.givenProvider = givenProvider;
 
 RequestManager.providers = {
-    WebsocketProvider: require('web3-providers-ws'),
-    HttpProvider: require('web3-providers-http'),
-    IpcProvider: require('web3-providers-ipc')
+    WebsocketProvider: require("web3-providers-ws"),
+    HttpProvider: require("web3-providers-http"),
+    IpcProvider: require("web3-providers-ipc"),
 };
-
 
 /**
  * Should be used to set provider of request manager
@@ -69,8 +66,7 @@ RequestManager.prototype.setProvider = function (provider, net) {
     var _this = this;
 
     // autodetect provider
-    if (provider && typeof provider === 'string' && this.providers) {
-
+    if (provider && typeof provider === "string" && this.providers) {
         // HTTP
         if (/^http(s)?:\/\//i.test(provider)) {
             provider = new this.providers.HttpProvider(provider);
@@ -80,52 +76,73 @@ RequestManager.prototype.setProvider = function (provider, net) {
             provider = new this.providers.WebsocketProvider(provider);
 
             // IPC
-        } else if (provider && typeof net === 'object' && typeof net.connect === 'function') {
+        } else if (
+            provider &&
+            typeof net === "object" &&
+            typeof net.connect === "function"
+        ) {
             provider = new this.providers.IpcProvider(provider, net);
-
         } else if (provider) {
-            throw new Error('Can\'t autodetect provider for "' + provider + '"');
+            throw new Error(
+                "Can't autodetect provider for \"" + provider + '"'
+            );
         }
     }
 
-
     // reset the old one before changing, if still connected
-    if (this.provider && this.provider.connected)
-        this.clearSubscriptions();
+    if (this.provider && this.provider.connected) this.clearSubscriptions();
 
     this.provider = provider || null;
 
     // listen to incoming notifications
     if (this.provider && this.provider.on) {
-        if (typeof provider.request === 'function') { // EIP-1193 provider
-            this.provider.on('message', function (payload) {
-                if (payload && payload.type === 'eth_subscription' && payload.data) {
-                    const data = payload.data
-                    if (data.subscription && _this.subscriptions.has(data.subscription)) {
-                        _this.subscriptions.get(data.subscription).callback(null, data.result);
+        if (typeof provider.request === "function") {
+            // EIP-1193 provider
+            this.provider.on("message", function (payload) {
+                if (
+                    payload &&
+                    payload.type === "eth_subscription" &&
+                    payload.data
+                ) {
+                    const data = payload.data;
+                    if (
+                        data.subscription &&
+                        _this.subscriptions.has(data.subscription)
+                    ) {
+                        _this.subscriptions
+                            .get(data.subscription)
+                            .callback(null, data.result);
                     }
                 }
-            })
-        } else { // legacy provider subscription event
-            this.provider.on('data', function data(result, deprecatedResult) {
+            });
+        } else {
+            // legacy provider subscription event
+            this.provider.on("data", function data(result, deprecatedResult) {
                 result = result || deprecatedResult; // this is for possible old providers, which may had the error first handler
 
                 // if result is a subscription, call callback for that subscription
-                if (result.method && result.params && result.params.subscription && _this.subscriptions.has(result.params.subscription)) {
-                    _this.subscriptions.get(result.params.subscription).callback(null, result.params.result);
+                if (
+                    result.method &&
+                    result.params &&
+                    result.params.subscription &&
+                    _this.subscriptions.has(result.params.subscription)
+                ) {
+                    _this.subscriptions
+                        .get(result.params.subscription)
+                        .callback(null, result.params.result);
                 }
             });
         }
 
         // resubscribe if the provider has reconnected
-        this.provider.on('connect', function connect() {
+        this.provider.on("connect", function connect() {
             _this.subscriptions.forEach(function (subscription) {
                 subscription.subscription.resubscribe();
             });
         });
 
         // notify all subscriptions about the error condition
-        this.provider.on('error', function error(error) {
+        this.provider.on("error", function error(error) {
             _this.subscriptions.forEach(function (subscription) {
                 subscription.callback(error);
             });
@@ -133,23 +150,29 @@ RequestManager.prototype.setProvider = function (provider, net) {
 
         // notify all subscriptions about bad close conditions
         const disconnect = function disconnect(event) {
-            if (!_this._isCleanCloseEvent(event) || _this._isIpcCloseError(event)) {
+            if (
+                !_this._isCleanCloseEvent(event) ||
+                _this._isIpcCloseError(event)
+            ) {
                 _this.subscriptions.forEach(function (subscription) {
                     subscription.callback(errors.ConnectionCloseError(event));
                     _this.subscriptions.delete(subscription.subscription.id);
                 });
 
                 if (_this.provider && _this.provider.emit) {
-                    _this.provider.emit('error', errors.ConnectionCloseError(event));
+                    _this.provider.emit(
+                        "error",
+                        errors.ConnectionCloseError(event)
+                    );
                 }
             }
             if (_this.provider && _this.provider.emit) {
-                _this.provider.emit('end', event);
+                _this.provider.emit("end", event);
             }
         };
         // TODO: Remove close once the standard allows it
-        this.provider.on('close', disconnect);
-        this.provider.on('disconnect', disconnect);
+        this.provider.on("close", disconnect);
+        this.provider.on("disconnect", disconnect);
 
         // TODO add end, timeout??
     }
@@ -164,27 +187,34 @@ RequestManager.prototype.setProvider = function (provider, net) {
  * @param {Function} callback
  */
 RequestManager.prototype.send = function (data, callback) {
-    callback = callback || function () { };
+    callback = callback || function () {};
 
     if (!this.provider) {
         return callback(errors.InvalidProvider());
     }
 
-    const { method, params } = data
+    const { method, params } = data;
 
     const jsonrpcPayload = Jsonrpc.toPayload(method, params);
-    const jsonrpcResultCallback = this._jsonrpcResultCallback(callback, jsonrpcPayload)
+    const jsonrpcResultCallback = this._jsonrpcResultCallback(
+        callback,
+        jsonrpcPayload
+    );
 
     if (this.provider.request) {
-        const callbackRequest = callbackify(this.provider.request.bind(this.provider))
-        const requestArgs = { method, params }
+        const callbackRequest = callbackify(
+            this.provider.request.bind(this.provider)
+        );
+        const requestArgs = { method, params };
         callbackRequest(requestArgs, callback);
     } else if (this.provider.sendAsync) {
         this.provider.sendAsync(jsonrpcPayload, jsonrpcResultCallback);
     } else if (this.provider.send) {
         this.provider.send(jsonrpcPayload, jsonrpcResultCallback);
     } else {
-        throw new Error('Provider does not have a request or send method to use.');
+        throw new Error(
+            "Provider does not have a request or send method to use."
+        );
     }
 };
 
@@ -201,19 +231,21 @@ RequestManager.prototype.sendBatch = function (data, callback) {
     }
 
     var payload = Jsonrpc.toBatchPayload(data);
-    this.provider[this.provider.sendAsync ? 'sendAsync' : 'send'](payload, function (err, results) {
-        if (err) {
-            return callback(err);
-        }
+    this.provider[this.provider.sendAsync ? "sendAsync" : "send"](
+        payload,
+        function (err, results) {
+            if (err) {
+                return callback(err);
+            }
 
-        if (!Array.isArray(results)) {
-            return callback(errors.InvalidResponse(results));
-        }
+            if (!Array.isArray(results)) {
+                return callback(errors.InvalidResponse(results));
+            }
 
-        callback(null, results);
-    });
+            callback(null, results);
+        }
+    );
 };
-
 
 /**
  * Waits for notifications
@@ -225,15 +257,15 @@ RequestManager.prototype.sendBatch = function (data, callback) {
  */
 RequestManager.prototype.addSubscription = function (subscription, callback) {
     if (this.provider.on) {
-        this.subscriptions.set(
-            subscription.id,
-            {
-                callback: callback,
-                subscription: subscription
-            }
-        );
+        this.subscriptions.set(subscription.id, {
+            callback: callback,
+            subscription: subscription,
+        });
     } else {
-        throw new Error('The provider doesn\'t support subscriptions: ' + this.provider.constructor.name);
+        throw new Error(
+            "The provider doesn't support subscriptions: " +
+                this.provider.constructor.name
+        );
     }
 };
 
@@ -252,15 +284,18 @@ RequestManager.prototype.removeSubscription = function (id, callback) {
         this.subscriptions.delete(id);
 
         // then, try to actually unsubscribe
-        this.send({
-            method: type + '_unsubscribe',
-            params: [id]
-        }, callback);
+        this.send(
+            {
+                method: type + "_unsubscribe",
+                params: [id],
+            },
+            callback
+        );
 
         return;
     }
 
-    if (typeof callback === 'function') {
+    if (typeof callback === "function") {
         // call the callback if the subscription was already removed
         callback(null);
     }
@@ -280,18 +315,17 @@ RequestManager.prototype.clearSubscriptions = function (keepIsSyncing) {
         // uninstall all subscriptions
         if (this.subscriptions.size > 0) {
             this.subscriptions.forEach(function (value, id) {
-                if (!keepIsSyncing || value.name !== 'syncing')
+                if (!keepIsSyncing || value.name !== "syncing")
                     _this.removeSubscription(id);
             });
         }
 
         //  reset notification callbacks etc.
-        if (this.provider.reset)
-            this.provider.reset();
+        if (this.provider.reset) this.provider.reset();
 
-        return true
+        return true;
     } catch (e) {
-        throw new Error(`Error while clearing subscriptions: ${e}`)
+        throw new Error(`Error while clearing subscriptions: ${e}`);
     }
 };
 
@@ -305,7 +339,10 @@ RequestManager.prototype.clearSubscriptions = function (keepIsSyncing) {
  * @returns {boolean}
  */
 RequestManager.prototype._isCleanCloseEvent = function (event) {
-    return typeof event === 'object' && ([1000].includes(event.code) || event.wasClean === true);
+    return (
+        typeof event === "object" &&
+        ([1000].includes(event.code) || event.wasClean === true)
+    );
 };
 
 /**
@@ -318,7 +355,7 @@ RequestManager.prototype._isCleanCloseEvent = function (event) {
  * @returns {boolean}
  */
 RequestManager.prototype._isIpcCloseError = function (event) {
-    return typeof event === 'boolean' && event;
+    return typeof event === "boolean" && event;
 };
 
 /**
@@ -335,7 +372,13 @@ RequestManager.prototype._isIpcCloseError = function (event) {
 RequestManager.prototype._jsonrpcResultCallback = function (callback, payload) {
     return function (err, result) {
         if (result && result.id && payload.id !== result.id) {
-            return callback(new Error(`Wrong response id ${result.id} (expected: ${payload.id}) in ${JSON.stringify(payload)}`));
+            return callback(
+                new Error(
+                    `Wrong response id ${result.id} (expected: ${
+                        payload.id
+                    }) in ${JSON.stringify(payload)}`
+                )
+            );
         }
 
         if (err) {
@@ -351,10 +394,10 @@ RequestManager.prototype._jsonrpcResultCallback = function (callback, payload) {
         }
 
         callback(null, result.result);
-    }
+    };
 };
 
 module.exports = {
     Manager: RequestManager,
-    BatchManager: BatchManager
+    BatchManager: BatchManager,
 };

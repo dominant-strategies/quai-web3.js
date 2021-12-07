@@ -20,12 +20,12 @@
  * @date 2019
  */
 
-'use strict';
+"use strict";
 
-var EventEmitter = require('eventemitter3');
-var helpers = require('./helpers.js');
-var errors = require('web3-core-helpers').errors;
-var Ws = require('websocket').w3cwebsocket;
+var EventEmitter = require("eventemitter3");
+var helpers = require("./helpers.js");
+var errors = require("@quainetwork/web3-core-helpers").errors;
+var Ws = require("websocket").w3cwebsocket;
 
 /**
  * @param {string} url
@@ -41,22 +41,23 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     this._customTimeout = options.timeout || 1000 * 15;
     this.headers = options.headers || {};
     this.protocol = options.protocol || undefined;
-    this.reconnectOptions = Object.assign({
+    this.reconnectOptions = Object.assign(
+        {
             auto: false,
             delay: 5000,
             maxAttempts: false,
-            onTimeout: false
+            onTimeout: false,
         },
         options.reconnect
     );
     this.clientConfig = options.clientConfig || undefined; // Allow a custom client configuration
     this.requestOptions = options.requestOptions || undefined; // Allow a custom request options (https://github.com/theturtle32/WebSocket-Node/blob/master/docs/WebSocketClient.md#connectrequesturl-requestedprotocols-origin-headers-requestoptions)
 
-    this.DATA = 'data';
-    this.CLOSE = 'close';
-    this.ERROR = 'error';
-    this.CONNECT = 'connect';
-    this.RECONNECT = 'reconnect';
+    this.DATA = "data";
+    this.CLOSE = "close";
+    this.ERROR = "error";
+    this.CONNECT = "connect";
+    this.RECONNECT = "reconnect";
 
     this.connection = null;
     this.requestQueue = new Map();
@@ -69,21 +70,26 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     // pass through with any additional headers supplied in constructor
     var parsedURL = helpers.parseURL(url);
     if (parsedURL.username && parsedURL.password) {
-        this.headers.authorization = 'Basic ' + helpers.btoa(parsedURL.username + ':' + parsedURL.password);
+        this.headers.authorization =
+            "Basic " +
+            helpers.btoa(parsedURL.username + ":" + parsedURL.password);
     }
 
     // When all node core implementations that do not have the
     // WHATWG compatible URL parser go out of service this line can be removed.
     if (parsedURL.auth) {
-        this.headers.authorization = 'Basic ' + helpers.btoa(parsedURL.auth);
+        this.headers.authorization = "Basic " + helpers.btoa(parsedURL.auth);
     }
 
     // make property `connected` which will return the current connection status
-    Object.defineProperty(this, 'connected', {
+    Object.defineProperty(this, "connected", {
         get: function () {
-            return this.connection && this.connection.readyState === this.connection.OPEN;
+            return (
+                this.connection &&
+                this.connection.readyState === this.connection.OPEN
+            );
         },
-        enumerable: true
+        enumerable: true,
     });
 
     this.connect();
@@ -101,7 +107,14 @@ WebsocketProvider.prototype.constructor = WebsocketProvider;
  * @returns {void}
  */
 WebsocketProvider.prototype.connect = function () {
-    this.connection = new Ws(this.url, this.protocol, undefined, this.headers, this.requestOptions, this.clientConfig);
+    this.connection = new Ws(
+        this.url,
+        this.protocol,
+        undefined,
+        this.headers,
+        this.requestOptions,
+        this.clientConfig
+    );
     this._addSocketListeners();
 };
 
@@ -115,27 +128,32 @@ WebsocketProvider.prototype.connect = function () {
 WebsocketProvider.prototype._onMessage = function (e) {
     var _this = this;
 
-    this._parseResponse((typeof e.data === 'string') ? e.data : '').forEach(function (result) {
-        if (result.method && result.method.indexOf('_subscription') !== -1) {
-            _this.emit(_this.DATA, result);
+    this._parseResponse(typeof e.data === "string" ? e.data : "").forEach(
+        function (result) {
+            if (
+                result.method &&
+                result.method.indexOf("_subscription") !== -1
+            ) {
+                _this.emit(_this.DATA, result);
 
-            return;
-        }
-
-        var id = result.id;
-
-        // get the id which matches the returned id
-        if (Array.isArray(result)) {
-            id = result[0].id;
-        }
-
-        if (_this.responseQueue.has(id)) {
-            if(_this.responseQueue.get(id).callback !== undefined) {
-                _this.responseQueue.get(id).callback(false, result);
+                return;
             }
-            _this.responseQueue.delete(id);
+
+            var id = result.id;
+
+            // get the id which matches the returned id
+            if (Array.isArray(result)) {
+                id = result[0].id;
+            }
+
+            if (_this.responseQueue.has(id)) {
+                if (_this.responseQueue.get(id).callback !== undefined) {
+                    _this.responseQueue.get(id).callback(false, result);
+                }
+                _this.responseQueue.delete(id);
+            }
         }
-    });
+    );
 };
 
 /**
@@ -170,7 +188,10 @@ WebsocketProvider.prototype._onConnect = function () {
 WebsocketProvider.prototype._onClose = function (event) {
     var _this = this;
 
-    if (this.reconnectOptions.auto && (![1000, 1001].includes(event.code) || event.wasClean === false)) {
+    if (
+        this.reconnectOptions.auto &&
+        (![1000, 1001].includes(event.code) || event.wasClean === false)
+    ) {
         this.reconnect();
 
         return;
@@ -187,7 +208,7 @@ WebsocketProvider.prototype._onClose = function (event) {
 
     if (this.responseQueue.size > 0) {
         this.responseQueue.forEach(function (request, key) {
-            request.callback(errors.InvalidConnection('on WS', event));
+            request.callback(errors.InvalidConnection("on WS", event));
             _this.responseQueue.delete(key);
         });
     }
@@ -204,9 +225,9 @@ WebsocketProvider.prototype._onClose = function (event) {
  * @returns {void}
  */
 WebsocketProvider.prototype._addSocketListeners = function () {
-    this.connection.addEventListener('message', this._onMessage.bind(this));
-    this.connection.addEventListener('open', this._onConnect.bind(this));
-    this.connection.addEventListener('close', this._onClose.bind(this));
+    this.connection.addEventListener("message", this._onMessage.bind(this));
+    this.connection.addEventListener("open", this._onConnect.bind(this));
+    this.connection.addEventListener("close", this._onClose.bind(this));
 };
 
 /**
@@ -217,9 +238,9 @@ WebsocketProvider.prototype._addSocketListeners = function () {
  * @returns {void}
  */
 WebsocketProvider.prototype._removeSocketListeners = function () {
-    this.connection.removeEventListener('message', this._onMessage);
-    this.connection.removeEventListener('open', this._onConnect);
-    this.connection.removeEventListener('close', this._onClose);
+    this.connection.removeEventListener("message", this._onMessage);
+    this.connection.removeEventListener("open", this._onConnect);
+    this.connection.removeEventListener("close", this._onClose);
 };
 
 /**
@@ -237,41 +258,45 @@ WebsocketProvider.prototype._parseResponse = function (data) {
 
     // DE-CHUNKER
     var dechunkedData = data
-        .replace(/\}[\n\r]?\{/g, '}|--|{') // }{
-        .replace(/\}\][\n\r]?\[\{/g, '}]|--|[{') // }][{
-        .replace(/\}[\n\r]?\[\{/g, '}|--|[{') // }[{
-        .replace(/\}\][\n\r]?\{/g, '}]|--|{') // }]{
-        .split('|--|');
+        .replace(/\}[\n\r]?\{/g, "}|--|{") // }{
+        .replace(/\}\][\n\r]?\[\{/g, "}]|--|[{") // }][{
+        .replace(/\}[\n\r]?\[\{/g, "}|--|[{") // }[{
+        .replace(/\}\][\n\r]?\{/g, "}]|--|{") // }]{
+        .split("|--|");
 
     dechunkedData.forEach(function (data) {
-
         // prepend the last chunk
-        if (_this.lastChunk)
-            data = _this.lastChunk + data;
+        if (_this.lastChunk) data = _this.lastChunk + data;
 
         var result = null;
 
         try {
             result = JSON.parse(data);
         } catch (e) {
-
             _this.lastChunk = data;
 
             // start timeout to cancel all requests
             clearTimeout(_this.lastChunkTimeout);
             _this.lastChunkTimeout = setTimeout(function () {
-                if (_this.reconnectOptions.auto && _this.reconnectOptions.onTimeout) {
+                if (
+                    _this.reconnectOptions.auto &&
+                    _this.reconnectOptions.onTimeout
+                ) {
                     _this.reconnect();
 
                     return;
                 }
 
-
-                _this.emit(_this.ERROR, errors.ConnectionTimeout(_this._customTimeout));
+                _this.emit(
+                    _this.ERROR,
+                    errors.ConnectionTimeout(_this._customTimeout)
+                );
 
                 if (_this.requestQueue.size > 0) {
                     _this.requestQueue.forEach(function (request, key) {
-                        request.callback(errors.ConnectionTimeout(_this._customTimeout));
+                        request.callback(
+                            errors.ConnectionTimeout(_this._customTimeout)
+                        );
                         _this.requestQueue.delete(key);
                     });
                 }
@@ -284,8 +309,7 @@ WebsocketProvider.prototype._parseResponse = function (data) {
         clearTimeout(_this.lastChunkTimeout);
         _this.lastChunk = null;
 
-        if (result)
-            returnValues.push(result);
+        if (result) returnValues.push(result);
     });
 
     return returnValues;
@@ -304,13 +328,16 @@ WebsocketProvider.prototype._parseResponse = function (data) {
 WebsocketProvider.prototype.send = function (payload, callback) {
     var _this = this;
     var id = payload.id;
-    var request = {payload: payload, callback: callback};
+    var request = { payload: payload, callback: callback };
 
     if (Array.isArray(payload)) {
         id = payload[0].id;
     }
 
-    if (this.connection.readyState === this.connection.CONNECTING || this.reconnecting) {
+    if (
+        this.connection.readyState === this.connection.CONNECTING ||
+        this.reconnecting
+    ) {
         this.requestQueue.set(id, request);
 
         return;

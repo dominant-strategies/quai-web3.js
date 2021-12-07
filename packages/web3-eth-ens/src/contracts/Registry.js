@@ -20,14 +20,13 @@
 
 "use strict";
 
-var Contract = require('web3-eth-contract');
-var namehash = require('eth-ens-namehash');
-var PromiEvent = require('web3-core-promievent');
-var formatters = require('web3-core-helpers').formatters;
-var utils = require('web3-utils');
-var REGISTRY_ABI = require('../resources/ABI/Registry');
-var RESOLVER_ABI = require('../resources/ABI/Resolver');
-
+var Contract = require("@quainetwork/web3-eth-contract");
+var namehash = require("eth-ens-namehash");
+var PromiEvent = require("@quainetwork/web3-core-promievent");
+var formatters = require("@quainetwork/web3-core-helpers").formatters;
+var utils = require("@quainetwork/web3-utils");
+var REGISTRY_ABI = require("../resources/ABI/Registry");
+var RESOLVER_ABI = require("../resources/ABI/Resolver");
 
 /**
  * A wrapper around the ENS registry contract.
@@ -61,7 +60,9 @@ function Registry(ens) {
  * @returns {Promise<string>}
  */
 Registry.prototype.owner = function (name, callback) {
-    console.warn('Deprecated: Please use the "getOwner" method instead of "owner".');
+    console.warn(
+        'Deprecated: Please use the "getOwner" method instead of "owner".'
+    );
 
     return this.getOwner(name, callback);
 };
@@ -80,26 +81,29 @@ Registry.prototype.owner = function (name, callback) {
 Registry.prototype.getOwner = function (name, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.owner(namehash.hash(name)).call();
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods.owner(namehash.hash(name)).call();
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -120,26 +124,34 @@ Registry.prototype.getOwner = function (name, callback) {
 Registry.prototype.setOwner = function (name, address, txConfig, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.setOwner(namehash.hash(name), formatters.inputAddressFormatter(address)).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setOwner(
+                    namehash.hash(name),
+                    formatters.inputAddressFormatter(address)
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -158,26 +170,29 @@ Registry.prototype.setOwner = function (name, address, txConfig, callback) {
 Registry.prototype.getTTL = function (name, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.ttl(namehash.hash(name)).call();
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods.ttl(namehash.hash(name)).call();
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -198,26 +213,31 @@ Registry.prototype.getTTL = function (name, callback) {
 Registry.prototype.setTTL = function (name, ttl, txConfig, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.setTTL(namehash.hash(name), ttl).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setTTL(namehash.hash(name), ttl)
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -236,37 +256,48 @@ Registry.prototype.setTTL = function (name, ttl, txConfig, callback) {
  * @callback callback callback(error, result)
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
-Registry.prototype.setSubnodeOwner = function (name, label, address, txConfig, callback) {
+Registry.prototype.setSubnodeOwner = function (
+    name,
+    label,
+    address,
+    txConfig,
+    callback
+) {
     var promiEvent = new PromiEvent(true);
 
     if (!utils.isHexStrict(label)) {
         label = utils.sha3(label);
     }
 
-    this.contract.then(function (contract) {
-        return contract.methods.setSubnodeOwner(
-            namehash.hash(name),
-            label,
-            formatters.inputAddressFormatter(address)
-        ).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setSubnodeOwner(
+                    namehash.hash(name),
+                    label,
+                    formatters.inputAddressFormatter(address)
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -286,34 +317,46 @@ Registry.prototype.setSubnodeOwner = function (name, label, address, txConfig, c
  * @callback callback callback(error, result)
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
-Registry.prototype.setRecord = function (name, owner, resolver, ttl, txConfig, callback) {
+Registry.prototype.setRecord = function (
+    name,
+    owner,
+    resolver,
+    ttl,
+    txConfig,
+    callback
+) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.setRecord(
-            namehash.hash(name),
-            formatters.inputAddressFormatter(owner),
-            formatters.inputAddressFormatter(resolver),
-            ttl
-        ).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setRecord(
+                    namehash.hash(name),
+                    formatters.inputAddressFormatter(owner),
+                    formatters.inputAddressFormatter(resolver),
+                    ttl
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -334,39 +377,52 @@ Registry.prototype.setRecord = function (name, owner, resolver, ttl, txConfig, c
  * @callback callback callback(error, result)
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
-Registry.prototype.setSubnodeRecord = function (name, label, owner, resolver, ttl, txConfig, callback) {
+Registry.prototype.setSubnodeRecord = function (
+    name,
+    label,
+    owner,
+    resolver,
+    ttl,
+    txConfig,
+    callback
+) {
     var promiEvent = new PromiEvent(true);
 
     if (!utils.isHexStrict(label)) {
         label = utils.sha3(label);
     }
 
-    this.contract.then(function (contract) {
-        return contract.methods.setSubnodeRecord(
-            namehash.hash(name),
-            label,
-            formatters.inputAddressFormatter(owner),
-            formatters.inputAddressFormatter(resolver),
-            ttl
-        ).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setSubnodeRecord(
+                    namehash.hash(name),
+                    label,
+                    formatters.inputAddressFormatter(owner),
+                    formatters.inputAddressFormatter(resolver),
+                    ttl
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -384,29 +440,42 @@ Registry.prototype.setSubnodeRecord = function (name, label, owner, resolver, tt
  * @callback callback callback(error, result)
  * @returns {PromiEvent<TransactionReceipt | TransactionRevertInstructionError>}
  */
-Registry.prototype.setApprovalForAll = function (operator, approved, txConfig, callback) {
+Registry.prototype.setApprovalForAll = function (
+    operator,
+    approved,
+    txConfig,
+    callback
+) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.setApprovalForAll(formatters.inputAddressFormatter(operator), approved).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setApprovalForAll(
+                    formatters.inputAddressFormatter(operator),
+                    approved
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -426,29 +495,34 @@ Registry.prototype.setApprovalForAll = function (operator, approved, txConfig, c
 Registry.prototype.isApprovedForAll = function (owner, operator, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.isApprovedForAll(
-            formatters.inputAddressFormatter(owner),
-            formatters.inputAddressFormatter(operator)
-        ).call();
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .isApprovedForAll(
+                    formatters.inputAddressFormatter(owner),
+                    formatters.inputAddressFormatter(operator)
+                )
+                .call();
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -467,26 +541,29 @@ Registry.prototype.isApprovedForAll = function (owner, operator, callback) {
 Registry.prototype.recordExists = function (name, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.recordExists(namehash.hash(name)).call();
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods.recordExists(namehash.hash(name)).call();
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };
@@ -505,7 +582,9 @@ Registry.prototype.recordExists = function (name, callback) {
  * @returns {Promise<Contract>}
  */
 Registry.prototype.resolver = function (name, callback) {
-    console.warn('Deprecated: Please use the "getResolver" method instead of "resolver".');
+    console.warn(
+        'Deprecated: Please use the "getResolver" method instead of "resolver".'
+    );
 
     return this.getResolver(name, callback);
 };
@@ -524,29 +603,32 @@ Registry.prototype.resolver = function (name, callback) {
 Registry.prototype.getResolver = function (name, callback) {
     var self = this;
 
-    return this.contract.then(function (contract) {
-        return contract.methods.resolver(namehash.hash(name)).call();
-    }).then(function (address) {
-        var contract = new Contract(RESOLVER_ABI, address);
-        contract.setProvider(self.ens.eth.currentProvider);
+    return this.contract
+        .then(function (contract) {
+            return contract.methods.resolver(namehash.hash(name)).call();
+        })
+        .then(function (address) {
+            var contract = new Contract(RESOLVER_ABI, address);
+            contract.setProvider(self.ens.eth.currentProvider);
 
-        if (typeof callback === 'function') {
-            // It's required to pass the contract to the first argument to be backward compatible and to have the required consistency
-            callback(contract, contract);
+            if (typeof callback === "function") {
+                // It's required to pass the contract to the first argument to be backward compatible and to have the required consistency
+                callback(contract, contract);
 
-            return;
-        }
+                return;
+            }
 
-        return contract;
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            return contract;
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        throw error;
-    });
+            throw error;
+        });
 };
 
 /**
@@ -565,26 +647,34 @@ Registry.prototype.getResolver = function (name, callback) {
 Registry.prototype.setResolver = function (name, address, txConfig, callback) {
     var promiEvent = new PromiEvent(true);
 
-    this.contract.then(function (contract) {
-        return contract.methods.setResolver(namehash.hash(name), formatters.inputAddressFormatter(address)).send(txConfig);
-    }).then(function (receipt) {
-        if (typeof callback === 'function') {
-            // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
-            callback(receipt, receipt);
+    this.contract
+        .then(function (contract) {
+            return contract.methods
+                .setResolver(
+                    namehash.hash(name),
+                    formatters.inputAddressFormatter(address)
+                )
+                .send(txConfig);
+        })
+        .then(function (receipt) {
+            if (typeof callback === "function") {
+                // It's required to pass the receipt to the first argument to be backward compatible and to have the required consistency
+                callback(receipt, receipt);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.resolve(receipt);
-    }).catch(function (error) {
-        if (typeof callback === 'function') {
-            callback(error, null);
+            promiEvent.resolve(receipt);
+        })
+        .catch(function (error) {
+            if (typeof callback === "function") {
+                callback(error, null);
 
-            return;
-        }
+                return;
+            }
 
-        promiEvent.reject(error);
-    });
+            promiEvent.reject(error);
+        });
 
     return promiEvent.eventEmitter;
 };

@@ -13,7 +13,7 @@ For more see the `Swarm Docs <https://docs.ethswarm.org/docs/>`_.
 
 .. code-block:: javascript
 
-    var Bzz = require('web3-bzz');
+    var Bzz = require('@quainetwork/web3-bzz');
 
     // will autodetect if the "ethereum" object is present and will either connect to the local swarm node, or the swarm-gateways.net.
     // Optional you can give your own provider URL; If no provider URL is given it will use "http://swarm-gateways.net"
@@ -63,7 +63,7 @@ Example
 
 .. code-block:: javascript
 
-    var Bzz = require('web3-bzz');
+    var Bzz = require('@quainetwork/web3-bzz');
     var bzz = new Bzz('http://localhost:8500');
 
     // change provider
