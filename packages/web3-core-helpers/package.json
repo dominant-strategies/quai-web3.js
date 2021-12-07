@@ -1,6 +1,6 @@
 {
     "name": "@quainetwork/web3-core-helpers",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "Web3 core tools helper for sub packages. This is an internal package.",
     "repository": "https://github.com/spruce-solutions/quai-web3.js/tree/1.x/packages/web3-core-helpers",
     "license": "LGPL-3.0",
