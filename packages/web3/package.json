@@ -28,10 +28,10 @@
         "@quainetwork/web3-core": "2.0.4",
         "@quainetwork/web3-net": "2.0.4",
         "@quainetwork/web3-utils": "2.0.1",
-        "web3-bzz": "1.6.1",
-        "web3-eth": "1.6.1",
-        "web3-eth-personal": "1.6.1",
-        "web3-shh": "1.6.1"
+        "@quainetwork/web3-bzz": "2.0.4",
+        "@quainetwork/web3-eth": "2.0.4",
+        "@quainetwork/web3-eth-personal": "2.0.4",
+        "@quainetwork/web3-ssh": "2.0.4"
     },
     "devDependencies": {
         "@quainetwork/web3-core-helpers": "2.0.3",

@@ -16,7 +16,7 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "web3-eth2-core": "1.6.1"
+        "@quainetwork/web3-eth2-core": "2.0.4"
     },
     "devDependencies": {
         "@babel/cli": "^7.12.10",

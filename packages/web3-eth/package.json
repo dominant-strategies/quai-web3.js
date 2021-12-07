@@ -23,9 +23,9 @@
         "@quainetwork/web3-eth-iban": "2.0.4",
         "@quainetwork/web3-net": "2.0.4",
         "@quainetwork/web3-utils": "2.0.1",
-        "web3-eth-accounts": "1.6.1",
-        "web3-eth-ens": "1.6.1",
-        "web3-eth-personal": "1.6.1"
+        "@quainetwork/web3-eth-accounts": "2.0.4",
+        "@quainetwork/web3-eth-ens": "2.0.4",
+        "@quainetwork/web3-eth-personal": "2.0.4"
     },
     "devDependencies": {
         "dtslint": "^3.4.1",

@@ -26,7 +26,7 @@
     "devDependencies": {
         "dtslint": "^3.4.1",
         "typescript": "^3.9.5",
-        "web3-eth": "1.6.1"
+        "@quainetwork/web3-eth": "2.0.4"
     },
     "gitHead": "c7b6d12fcc2a20f253c65b33f3d050705df7f26e"
 }
