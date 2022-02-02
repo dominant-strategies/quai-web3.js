@@ -91,7 +91,7 @@ var isPredefinedBlockNumber = function (blockNumber) {
  *
  * @method inputDefaultBlockNumberFormatter
  *
- * @param {String|Number|BN|BigNumber} blockNumber
+ * @param {Array<String|Number|BN|BigNumber>} blockNumber
  *
  * @returns {String}
  */
@@ -106,28 +106,31 @@ var inputDefaultBlockNumberFormatter = function (blockNumber) {
 /**
  * Returns the given block number as hex string or the predefined block number 'latest', 'pending', 'earliest', 'genesis'
  *
- * @param {String|Number|BN|BigNumber} blockNumber
+ * @param {Array<String|Number|BN|BigNumber>} blockNumber
  *
- * @returns {String}
+ * @returns {Array<String>}
  */
 var inputBlockNumberFormatter = function (blockNumber) {
-    if (blockNumber === undefined) {
-        return undefined;
-    }
+    var blockNumberArray = blockNumber.map((blockNum) => {
+        if (blockNum === undefined) {
+            blockNum = undefined;
+        }
 
-    if (isPredefinedBlockNumber(blockNumber)) {
-        return blockNumber;
-    }
+        if (isPredefinedBlockNumber(blockNum)) {
+            blockNum = blockNum;
+        }
 
-    if (blockNumber === "genesis") {
-        return "0x0";
-    }
+        if (blockNum === "genesis") {
+            blockNum = "0x0";
+        }
 
-    return utils.isHexStrict(blockNumber)
-        ? typeof blockNumber === "string"
-            ? blockNumber.toLowerCase()
-            : blockNumber
-        : utils.numberToHex(blockNumber);
+        blockNum = utils.isHexStrict(blockNum)
+            ? typeof blockNum === "string"
+                ? blockNum.toLowerCase()
+                : blockNum
+            : utils.numberToHex(blockNum);
+    });
+    return blockNumberArray;
 };
 
 /**
@@ -330,33 +333,32 @@ var outputTransactionReceiptFormatter = function (receipt) {
  * @returns {Object}
  */
 var outputBlockFormatter = function (block) {
-    // temporarily commenting out the formatter.
-    //
-    // transform to number
-    // block.gasLimit = utils.hexToNumber(block.gasLimit);
-    // block.gasUsed = utils.hexToNumber(block.gasUsed);
-    // block.size = utils.hexToNumber(block.size);
-    // block.timestamp = utils.hexToNumber(block.timestamp);
-    // if (block.number !== null)
-    //     block.number = utils.hexToNumber(block.number);
+    block.gasLimit = block.gasLimit.map((gasLimit) =>
+        utils.hexToNumber(gasLimit)
+    );
+    block.gasUsed = block.gasUsed.map((gasUsed) => utils.hexToNumber(gasUsed));
+    block.size = utils.hexToNumber(block.size);
+    block.timestamp = utils.hexToNumber(block.timestamp);
+    if (block.number !== null) block.number = utils.hexToNumber(block.number);
 
-    // if (block.difficulty)
-    //     block.difficulty = outputBigNumberFormatter(block.difficulty);
-    // if (block.totalDifficulty)
-    //     block.totalDifficulty = outputBigNumberFormatter(block.totalDifficulty);
+    if (block.difficulty)
+        block.difficulty = block.difficulty.map((difficulty) =>
+            outputBigNumberFormatter(difficulty)
+        );
+    if (block.totalDifficulty)
+        block.totalDifficulty = outputBigNumberFormatter(block.totalDifficulty);
 
-    // if (Array.isArray(block.transactions)) {
-    //     block.transactions.forEach(function (item) {
-    //         if (!(typeof item === 'string'))
-    //             return outputTransactionFormatter(item);
-    //     });
-    // }
+    if (Array.isArray(block.transactions)) {
+        block.transactions.forEach(function (item) {
+            if (!(typeof item === "string"))
+                return outputTransactionFormatter(item);
+        });
+    }
 
-    // if (block.miner)
-    //     block.miner = utils.toChecksumAddress(block.miner);
+    if (block.miner) block.miner = utils.toChecksumAddress(block.miner);
 
-    // if (block.baseFeePerGas)
-    //     block.baseFeePerGas = utils.hexToNumber(block.baseFeePerGas)
+    if (block.baseFeePerGas)
+        block.baseFeePerGas = utils.hexToNumber(block.baseFeePerGas);
 
     return block;
 };
@@ -381,7 +383,7 @@ var inputLogFormatter = function (options) {
     if (options === undefined) options = {};
     // If options !== undefined, don't blow out existing data
     if (options.fromBlock === undefined)
-        options = { ...options, fromBlock: "latest" };
+        options = {...options, fromBlock: "latest"};
     if (options.fromBlock || options.fromBlock === 0)
         options.fromBlock = inputBlockNumberFormatter(options.fromBlock);
 

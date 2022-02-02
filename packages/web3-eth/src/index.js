@@ -42,32 +42,32 @@ var formatter = helpers.formatters;
 
 var blockCall = function (args) {
     return typeof args[0] === "string" && args[0].indexOf("0x") === 0
-        ? "eth_getBlockByHash"
-        : "eth_getBlockByNumber";
+        ? "quai_getBlockByHash"
+        : "quai_getBlockByNumber";
 };
 
 var transactionFromBlockCall = function (args) {
     return typeof args[0] === "string" && args[0].indexOf("0x") === 0
-        ? "eth_getTransactionByBlockHashAndIndex"
-        : "eth_getTransactionByBlockNumberAndIndex";
+        ? "quai_getTransactionByBlockHashAndIndex"
+        : "quai_getTransactionByBlockNumberAndIndex";
 };
 
 var uncleCall = function (args) {
     return typeof args[0] === "string" && args[0].indexOf("0x") === 0
-        ? "eth_getUncleByBlockHashAndIndex"
-        : "eth_getUncleByBlockNumberAndIndex";
+        ? "quai_getUncleByBlockHashAndIndex"
+        : "quai_getUncleByBlockNumberAndIndex";
 };
 
 var getBlockTransactionCountCall = function (args) {
     return typeof args[0] === "string" && args[0].indexOf("0x") === 0
-        ? "eth_getBlockTransactionCountByHash"
-        : "eth_getBlockTransactionCountByNumber";
+        ? "quai_getBlockTransactionCountByHash"
+        : "quai_getBlockTransactionCountByNumber";
 };
 
 var uncleCountCall = function (args) {
     return typeof args[0] === "string" && args[0].indexOf("0x") === 0
-        ? "eth_getUncleCountByBlockHash"
-        : "eth_getUncleCountByBlockNumber";
+        ? "quai_getUncleCountByBlockHash"
+        : "quai_getUncleCountByBlockNumber";
 };
 
 var Eth = function Eth() {
@@ -393,40 +393,40 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getProtocolVersion",
-            call: "eth_protocolVersion",
+            call: "quai_protocolVersion",
             params: 0,
         }),
         new Method({
             name: "getCoinbase",
-            call: "eth_coinbase",
+            call: "quai_coinbase",
             params: 0,
         }),
         new Method({
             name: "isMining",
-            call: "eth_mining",
+            call: "quai_mining",
             params: 0,
         }),
         new Method({
             name: "getHashrate",
-            call: "eth_hashrate",
+            call: "quai_hashrate",
             params: 0,
             outputFormatter: utils.hexToNumber,
         }),
         new Method({
             name: "isSyncing",
-            call: "eth_syncing",
+            call: "quai_syncing",
             params: 0,
             outputFormatter: formatter.outputSyncingFormatter,
         }),
         new Method({
             name: "getGasPrice",
-            call: "eth_gasPrice",
+            call: "quai_gasPrice",
             params: 0,
             outputFormatter: formatter.outputBigNumberFormatter,
         }),
         new Method({
             name: "getFeeHistory",
-            call: "eth_feeHistory",
+            call: "quai_feeHistory",
             params: 3,
             inputFormatter: [
                 utils.numberToHex,
@@ -436,19 +436,19 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getAccounts",
-            call: "eth_accounts",
+            call: "quai_accounts",
             params: 0,
             outputFormatter: utils.toChecksumAddress,
         }),
         new Method({
             name: "getBlockNumber",
-            call: "eth_blockNumber",
+            call: "quai_blockNumber",
             params: 0,
             outputFormatter: utils.hexToNumber,
         }),
         new Method({
             name: "getBalance",
-            call: "eth_getBalance",
+            call: "quai_getBalance",
             params: 2,
             inputFormatter: [
                 formatter.inputAddressFormatter,
@@ -458,7 +458,7 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getStorageAt",
-            call: "eth_getStorageAt",
+            call: "quai_getStorageAt",
             params: 3,
             inputFormatter: [
                 formatter.inputAddressFormatter,
@@ -468,7 +468,7 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getCode",
-            call: "eth_getCode",
+            call: "quai_getCode",
             params: 2,
             inputFormatter: [
                 formatter.inputAddressFormatter,
@@ -513,7 +513,7 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getTransaction",
-            call: "eth_getTransactionByHash",
+            call: "quai_getTransactionByHash",
             params: 1,
             inputFormatter: [null],
             outputFormatter: formatter.outputTransactionFormatter,
@@ -530,14 +530,14 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getTransactionReceipt",
-            call: "eth_getTransactionReceipt",
+            call: "quai_getTransactionReceipt",
             params: 1,
             inputFormatter: [null],
             outputFormatter: formatter.outputTransactionReceiptFormatter,
         }),
         new Method({
             name: "getTransactionCount",
-            call: "eth_getTransactionCount",
+            call: "quai_getTransactionCount",
             params: 2,
             inputFormatter: [
                 formatter.inputAddressFormatter,
@@ -547,27 +547,27 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "sendSignedTransaction",
-            call: "eth_sendRawTransaction",
+            call: "quai_sendRawTransaction",
             params: 1,
             inputFormatter: [null],
             abiCoder: abi,
         }),
         new Method({
             name: "signTransaction",
-            call: "eth_signTransaction",
+            call: "quai_signTransaction",
             params: 1,
             inputFormatter: [formatter.inputTransactionFormatter],
         }),
         new Method({
             name: "sendTransaction",
-            call: "eth_sendTransaction",
+            call: "quai_sendTransaction",
             params: 1,
             inputFormatter: [formatter.inputTransactionFormatter],
             abiCoder: abi,
         }),
         new Method({
             name: "sign",
-            call: "eth_sign",
+            call: "quai_sign",
             params: 2,
             inputFormatter: [
                 formatter.inputSignFormatter,
@@ -580,7 +580,7 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "call",
-            call: "eth_call",
+            call: "quai_call",
             params: 2,
             inputFormatter: [
                 formatter.inputCallFormatter,
@@ -590,43 +590,43 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "estimateGas",
-            call: "eth_estimateGas",
+            call: "quai_estimateGas",
             params: 1,
             inputFormatter: [formatter.inputCallFormatter],
             outputFormatter: utils.hexToNumber,
         }),
         new Method({
             name: "submitWork",
-            call: "eth_submitWork",
+            call: "quai_submitWork",
             params: 3,
         }),
         new Method({
             name: "getWork",
-            call: "eth_getWork",
+            call: "quai_getWork",
             params: 0,
         }),
         new Method({
             name: "getPastLogs",
-            call: "eth_getLogs",
+            call: "quai_getLogs",
             params: 1,
             inputFormatter: [formatter.inputLogFormatter],
             outputFormatter: formatter.outputLogFormatter,
         }),
         new Method({
             name: "getChainId",
-            call: "eth_chainId",
+            call: "quai_chainId",
             params: 0,
             outputFormatter: utils.hexToNumber,
         }),
         new Method({
             name: "requestAccounts",
-            call: "eth_requestAccounts",
+            call: "quai_requestAccounts",
             params: 0,
             outputFormatter: utils.toChecksumAddress,
         }),
         new Method({
             name: "getProof",
-            call: "eth_getProof",
+            call: "quai_getProof",
             params: 3,
             inputFormatter: [
                 formatter.inputAddressFormatter,
@@ -637,13 +637,13 @@ var Eth = function Eth() {
         }),
         new Method({
             name: "getPendingTransactions",
-            call: "eth_pendingTransactions",
+            call: "quai_pendingTransactions",
             params: 0,
             outputFormatter: formatter.outputTransactionFormatter,
         }),
         new Method({
             name: "createAccessList",
-            call: "eth_createAccessList",
+            call: "quai_createAccessList",
             params: 2,
             inputFormatter: [
                 formatter.inputTransactionFormatter,
